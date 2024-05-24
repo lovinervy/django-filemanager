@@ -1,0 +1,53 @@
+<!-- templates/directory_detail.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Explorer</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .directory, .file { margin: 10px 0; }
+        .button { display: inline-block; margin-right: 10px; padding: 10px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; }
+        .button:hover { background-color: #0056b3; }
+        .breadcrumb { margin-bottom: 20px; }
+        .breadcrumb a { text-decoration: none; color: #007bff; }
+        .breadcrumb a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>File Explorer</h1>
+        <div class="breadcrumb">
+            {% if current_directory.parent %}
+                <a href="{% url 'directory_detail' current_directory.parent.id %}">Up</a>
+            {% else %}
+                <a href="{% url 'home' %}">Home</a>
+            {% endif %}
+            / {{ current_directory.name }}
+        </div>
+        <a href="{% url 'create_directory' current_directory.id %}" class="button">Create Directory</a>
+        <a href="{% url 'upload_file' current_directory.id %}" class="button">Upload File</a>
+        
+        <h2>Directories</h2>
+        <div>
+            {% for subdirectory in subdirectories %}
+                <div class="directory">
+                    <a href="{% url 'directory_detail' subdirectory.id %}">{{ subdirectory.name }}</a>
+                </div>
+            {% endfor %}
+        </div>
+
+        <h2>Files</h2>
+        <div>
+            {% for file in files %}
+                <div class="file">
+                    <a href="{% url 'download_file' file.id %}">{{ file.name }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
